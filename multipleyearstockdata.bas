@@ -7,17 +7,17 @@ Dim ws As Worksheet
         
         lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
 
-        Dim openprice As Double
-        Dim closeprice As Double
-        Dim yearlychange As Double
+        Dim i As Long
+        Dim b As Long
         Dim ticker As String
+        Dim yearlychange As Double
         Dim percentchange As Double
         Dim volume As Double
         volume = 0
         Dim r As Double
         r = 2
-        Dim i As Long
-        Dim b As Long
+        Dim opening As Double
+        Dim closing As Double
 
         ws.Cells(1, 9).Value = "Ticker"
         ws.Cells(1, 10).Value = "Yearly Change"
@@ -29,7 +29,7 @@ Dim ws As Worksheet
         ws.Cells(3, 15).Value = "Greatest % Decrease"
         ws.Cells(4, 15).Value = "Greatest Total Volume"
         
-       openprice = ws.Cells(2, 3).Value
+       opening = ws.Cells(2, 3).Value
        
         For i = 2 To lastrow
          
@@ -38,9 +38,9 @@ Dim ws As Worksheet
                 ticker = ws.Cells(i, 1).Value
                 ws.Cells(r, 9).Value = ticker
                
-                closeprice = ws.Cells(i, 6).Value
+                closing = ws.Cells(i, 6).Value
                
-                yearlychange = closeprice - openprice
+                yearlychange = closing - opening
                 ws.Cells(r, 10).Value = yearlychange
                     
                     If ws.Cells(r, 10).Value > 0 Then
@@ -50,14 +50,14 @@ Dim ws As Worksheet
                         ws.Cells(r, 10).Interior.Color = RGB(255, 0, 0)
                     End If
     
-                    If (openprice = 0 And closeprice = 0) Then
+                    If (opening = 0 And closing = 0) Then
                         percentchange = 0
                     
-                    ElseIf (openprice = 0 And closeprice <> 0) Then
+                    ElseIf (opening = 0 And closing <> 0) Then
                         percentchange = 1
                     
                     Else
-                        percentchange = yearlychange / openprice
+                        percentchange = yearlychange / opening
                         ws.Cells(r, 11).Value = percentchange
                         ws.Cells(r, 11).NumberFormat = "0.00%"
                     End If
@@ -67,7 +67,7 @@ Dim ws As Worksheet
                
                 r = r + 1
                 
-                openprice = ws.Cells(i + 1, 3)
+                opening = ws.Cells(i + 1, 3)
                
                 volume = 0
             
